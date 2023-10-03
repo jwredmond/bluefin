@@ -22,17 +22,6 @@ COPY packages.json /tmp/packages.json
 COPY build.sh /tmp/build.sh
 COPY image-info.sh /tmp/image-info.sh
 
-# GNOME VRR
-RUN if grep -qv "39" <<< "${FEDORA_MAJOR_VERSION}"; then \
-    wget https://copr.fedorainfracloud.org/coprs/kylegospo/gnome-vrr/repo/fedora-"${FEDORA_MAJOR_VERSION}"/kylegospo-gnome-vrr-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo && \
-    if [ ${FEDORA_MAJOR_VERSION} -lt 39 ]; then \
-        rpm-ostree override replace --experimental --from repo=copr:copr.fedorainfracloud.org:kylegospo:gnome-vrr mutter mutter-common gnome-control-center gnome-control-center-filesystem xorg-x11-server-Xwayland \
-    ; else \
-        rpm-ostree override replace --experimental --from repo=copr:copr.fedorainfracloud.org:kylegospo:gnome-vrr mutter mutter-common gnome-control-center gnome-control-center-filesystem \
-    ; fi && \
-    rm -f /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo \
-    ; fi
-
 # Starship Shell Prompt
 RUN curl -Lo /tmp/starship.tar.gz "https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz" && \
   tar -xzf /tmp/starship.tar.gz -C /tmp && \
